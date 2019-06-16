@@ -15,6 +15,13 @@ from importlib import reload
 
 # plotting
 
+def _plotting_style(dark=False, scale_figsize=1.5):
+    if dark:
+        plt.style.use('dark_background')
+    else:
+        sns.set()
+    
+    plt.rcParams['figure.figsize'] = [6*(np.sqrt(scale_figsize)), 4*(np.sqrt(scale_figsize))]
 
 def pretty_plot(pdobj, percent=False, decimals=0, commas=False, save=False, **kwargs):
     import matplotlib.pyplot as plt
