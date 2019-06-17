@@ -23,6 +23,16 @@ def _plotting_style(dark=False, scale_figsize=1.5):
     
     plt.rcParams['figure.figsize'] = [6*(np.sqrt(scale_figsize)), 4*(np.sqrt(scale_figsize))]
 
+    
+def legend_outside(ax, position='right', **kwargs):
+    if position == 'right':
+        chartBox = ax.get_position()
+        ax.set_position([chartBox.x0, chartBox.y0, chartBox.width, chartBox.height])
+        ax.legend(loc='upper center', bbox_to_anchor=(1.1, 1), shadow=False, ncol=1, facecolor='white', edgecolor='white')
+    
+    elif position == 'bottom':
+        ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), shadow=False, ncol=4, facecolor='white', edgecolor='white')
+
 def pretty_plot(pdobj, percent=False, decimals=0, commas=False, save=False, **kwargs):
     import matplotlib.pyplot as plt
     import matplotlib.ticker as mtick
