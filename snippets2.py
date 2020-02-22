@@ -14,6 +14,8 @@ ipython.run_line_magic('config', "InlineBackend.figure_format='retina'")
 
 from numpy import array, test, testing
 
+figsize(9,6)
+
 import seaborn as sns
 sns.set()
 
@@ -80,3 +82,7 @@ def run_grid(func, client, **grid_kwargs):
     grid = pd.Series(data=futures, index=idx)
     
     return grid
+
+
+# legend outside
+# DataFrame(randn(7, 3),).plot(kind='bar').legend(bbox_to_anchor=(1.1, 1), borderaxespad=0, frameon=False)
