@@ -1,3 +1,6 @@
+# need to run twice:
+# https://github.com/ipython/ipython/issues/11098
+
 import pandas as pd
 from pandas import *
 
