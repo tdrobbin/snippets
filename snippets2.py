@@ -1,4 +1,3 @@
-# imports and configs
 import pandas as pd
 from pandas import *
 
@@ -24,6 +23,44 @@ from dask.distributed import Client, Future
 
 
 def run_grid(func, client, **grid_kwargs):
+    """
+    eg:
+    
+        def func(x, y, z):
+        return (x*2, y, z)
+
+        grid_kwargs = {
+            'x': [1,2,3], 
+            'y': ['a', 'b'], 
+            'z': [
+               {'arg1':1, 'arg2': 2},
+               {'arg1':2, 'arg2': 3}
+            ]
+        }
+
+        grid = run_grid(func, c, **grid_kwargs)
+        
+    grid:
+    
+        x  y  z                     
+        1  a  {'arg1': 1, 'arg2': 2}    <Future: status: finished, type: tuple, key: f...
+              {'arg1': 2, 'arg2': 3}    <Future: status: finished, type: tuple, key: f...
+           b  {'arg1': 1, 'arg2': 2}    <Future: status: finished, type: tuple, key: f...
+              {'arg1': 2, 'arg2': 3}    <Future: status: finished, type: tuple, key: f...
+        2  a  {'arg1': 1, 'arg2': 2}    <Future: status: finished, type: tuple, key: f...
+              {'arg1': 2, 'arg2': 3}    <Future: status: finished, type: tuple, key: f...
+           b  {'arg1': 1, 'arg2': 2}    <Future: status: finished, type: tuple, key: f...
+              {'arg1': 2, 'arg2': 3}    <Future: status: finished, type: tuple, key: f...
+        3  a  {'arg1': 1, 'arg2': 2}    <Future: status: finished, type: tuple, key: f...
+              {'arg1': 2, 'arg2': 3}    <Future: status: finished, type: tuple, key: f...
+           b  {'arg1': 1, 'arg2': 2}    <Future: status: finished, type: tuple, key: f...
+              {'arg1': 2, 'arg2': 3}    <Future: status: finished, type: tuple, key: f...
+    
+    grid.loc[3, 'a', :].map(Future.result):
+        x  y  z                     
+        3  a  {'arg1': 1, 'arg2': 2}    (6, a, {'arg1': 1, 'arg2': 2})
+              {'arg1': 2, 'arg2': 3}    (6, a, {'arg1': 2, 'arg2': 3})
+    """
     import pandas as pd
     
     def _make_hashable(o):
