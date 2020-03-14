@@ -28,8 +28,8 @@ sns.set('talk')
 figsize(9, 6)
 rcParams['axes.titlepad'] = 18
 rcParams['legend.frameon'] = False
-rcParams['legend.borderaxespad'] = 0
-rcParams['legend.loc'] = (1.01,0)
+# rcParams['legend.borderaxespad'] = 0
+# rcParams['legend.loc'] = (1.01,0)
 
 
 # reset any bultin we may have overidden
