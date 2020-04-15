@@ -1,10 +1,12 @@
-def run_grid(func, client, **grid_kwargs):
+import pandas as pd
+
+
+def run_grid(func, grid_kwargs, client=None):
     """
     eg:
-    
         def func(x, y, z):
-        return (x*2, y, z)
-
+            return (x*2, y, z)
+            
         grid_kwargs = {
             'x': [1,2,3], 
             'y': ['a', 'b'], 
@@ -13,11 +15,12 @@ def run_grid(func, client, **grid_kwargs):
                {'arg1':2, 'arg2': 3}
             ]
         }
-
-        grid = run_grid(func, c, **grid_kwargs)
+        
+        client = Client()
+        
+        grid = run_grid(func, grid_kwargs, client)
         
     grid:
-    
         x  y  z                     
         1  a  {'arg1': 1, 'arg2': 2}    <Future: status: finished, type: tuple, key: f...
               {'arg1': 2, 'arg2': 3}    <Future: status: finished, type: tuple, key: f...
@@ -36,9 +39,7 @@ def run_grid(func, client, **grid_kwargs):
         x  y  z                     
         3  a  {'arg1': 1, 'arg2': 2}    (6, a, {'arg1': 1, 'arg2': 2})
               {'arg1': 2, 'arg2': 3}    (6, a, {'arg1': 2, 'arg2': 3})
-    """
-    import pandas as pd
-    
+    """    
     def _make_hashable(o):
         try:
             hash(o)
@@ -46,17 +47,16 @@ def run_grid(func, client, **grid_kwargs):
         except TypeError:
             return str(o)
 
-    keys = grid_kwargs.keys()
-    vals = grid_kwargs.values()
-    hasahble_vals = [[_make_hashable(o) for o in val] for val in vals]
+    param_grid = ParameterGrid(grid_kwargs)
+    hashable_param_grid = [{k: _make_hashable(v) for k, v in d.items()} for d in param_grid]
 
-    idx = pd.MultiIndex.from_product(hasahble_vals, names=keys)
-    futures = [client.submit(func, **dict(zip(keys, args))) for args in idx]
-
-    grid = pd.Series(data=futures, index=idx)
+    if client is not None:
+        results = [client.submit(func, **params) for params in param_grid]
     
+    else:
+        results = [func(**params) for params in param_grid]
+    
+    idx = pd.MultiIndex.from_frame(pd.DataFrame(hashable_param_grid))
+    grid = pd.Series(data=results, index=idx)
+
     return grid
-
-
-# legend outside
-# DataFrame(randn(7, 3),).plot(kind='bar').legend(bbox_to_anchor=(1.1, 1), borderaxespad=0, frameon=False)
