@@ -32,4 +32,4 @@ def theme_plots(dark=False):
   mpl_style(dark=dark)
   
   if dark:
-    pass
+    plt.rcParams['figure.facecolor'] = '#111111'
