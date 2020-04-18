@@ -33,3 +33,52 @@ def theme_plots(dark=False):
   
   if dark:
     plt.rcParams['figure.facecolor'] = '#111111'
+
+def set_plotting_style(dark=False):
+    if dark:
+        sns.set(
+            context='talk' ,
+            rc={
+                'figure.figsize': (9, 6),
+                'axes.facecolor': '#111111',
+                'figure.facecolor': '#111111',
+                'grid.color': '#6f6f6f',
+                'grid.linewidth': 0.5,
+                "lines.linewidth": 1.5,
+                'text.color': 'white',
+                'xtick.color': 'white',
+                'ytick.color': 'white',
+                'axes.titlepad': 18,
+                'legend.frameon': False,
+                'axes.spines.top': False,
+                'axes.spines.right': False,
+                'axes.spines.bottom': False,
+                'axes.spines.left': False,
+                'patch.force_edgecolor': False,
+                'axes.labelcolor': 'white'
+            }
+        )
+    
+    else:
+        sns.set(
+            context='talk' ,
+            rc={
+                'figure.figsize': (9, 6),
+                'axes.facecolor': 'white',
+                'figure.facecolor': 'white',
+                'grid.color': '#dddddd',
+                'grid.linewidth': 0.5,
+                "lines.linewidth": 1.5,
+                'text.color': 'black',
+                'xtick.color': 'black',
+                'ytick.color': 'black',
+                'axes.titlepad': 18,
+                'legend.frameon': False,
+                'axes.spines.top': False,
+                'axes.spines.right': False,
+                'axes.spines.bottom': False,
+                'axes.spines.left': False,
+                'patch.force_edgecolor': False,
+                'axes.labelcolor': 'black'
+            }
+        )
