@@ -71,4 +71,30 @@ to use sql from bash
 ```
 su - postgres
 psql
+create database test;
+\q
+```
+
+then create svc role for connection via python
+```
+# https://medium.com/coding-blocks/creating-user-database-and-adding-access-on-postgresql-8bfcd2f4a91e
+create user svc
+psql
+CREATE USER svc WITH ENCRYPTED PASSWORD 'svc';
+GRANT ALL PRIVILEGES ON DATABASE test TO svc;
+\q
+
+and finally to connect to database from python
+```
+from sqlalchemy import create_engine
+db = create_engine("postgresql:///test")
+```
+
+or
+```
+from sqlalchemy import create_engine
+eng = create_engine("postgresql://svc:svc@localhost:5432/test")
+
+import dataset
+db = dataset.connect("postgresql://svc:svc@localhost:5432/test")
 ```
